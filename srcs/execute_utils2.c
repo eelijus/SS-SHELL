@@ -6,7 +6,7 @@
 /*   By: sean <sean@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/02 20:22:04 by sean              #+#    #+#             */
-/*   Updated: 2022/03/19 21:57:48 by sean             ###   ########.fr       */
+/*   Updated: 2022/03/19 22:00:42 by sean             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,8 @@ void	exec_init(t_exec *exec, t_cmd *cmd)
 		exec->split_cmd = (char **)malloc(sizeof(char *) * 1);
 		exec->split_cmd[0] = 0;
 	}
-	if (exec->split_cmd[0] && ft_strncmp(exec->split_cmd[0], "echo", ft_strlen(exec->split_cmd[0])) \
+	if (exec->split_cmd[0] && \
+	ft_strncmp(exec->split_cmd[0], "echo", ft_strlen(exec->split_cmd[0])) \
 	&& (!ft_strchr(cmd->cmd, '"') || !ft_strchr(cmd->cmd, '\'')))
 	{
 		dfree(exec->split_cmd);
