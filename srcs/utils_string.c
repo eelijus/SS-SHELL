@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_string.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sujilee <sujilee@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sean <sean@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/25 14:43:02 by sujilee           #+#    #+#             */
-/*   Updated: 2022/03/12 10:50:25 by sujilee          ###   ########.fr       */
+/*   Updated: 2022/03/18 17:28:42 by sean             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,12 +60,4 @@ char	**ft_addonestring(char **origin, char *addline)
 	dfree(origin);
 	origin = 0;
 	return (new);
-}
-
-void	free_strings(char **str1, char **str2, char **str3, char **str4)
-{
-	free(*str1);
-	free(*str2);
-	free(*str3);
-	free(*str4);
 }

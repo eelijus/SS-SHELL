@@ -6,11 +6,13 @@
 /*   By: sean <sean@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/01 16:23:18 by okwon             #+#    #+#             */
-/*   Updated: 2022/03/11 20:37:24 by sean             ###   ########.fr       */
+/*   Updated: 2022/03/18 19:17:59 by sujilee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+t_glob	g_glob;
 
 void	dfree(char **str)
 {
@@ -44,22 +46,21 @@ int	dlen(char **darr)
 
 void	prompt(int flag)
 {
-	if (flag == 1)
+	if (flag == 0)
 		write(1, "SS-SHELL$ ", 10);
-	else if (flag == 2)
+	else if (flag == 1)
 	{
-		write(1, "\n", 1);
-		write(1, "SS-SHELL$ ", 10);
+		write(1, "\nSS-SHELL$ ", 11);
+		g_glob.cflag = 0;
 	}
 	else if (flag == 3)
 	{
-		write(1, "SS-SHELL$ ", 10);
+		g_glob.cflag = 0;
+		write(1, "Quit: 3\n", 8);
+	}
+	else if (flag == 2)
+	{
+		g_glob.cflag = 0;
 		write(1, "\n", 1);
 	}
-}
-
-void	cexit(char *str)
-{
-	exit(0);
-	printf("%s\n", str);
 }

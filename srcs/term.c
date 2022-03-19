@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   term.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sean <sean@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: sujilee <sujilee@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/01 16:21:08 by okwon             #+#    #+#             */
-/*   Updated: 2022/03/11 20:19:52 by sujilee          ###   ########.fr       */
+/*   Updated: 2022/03/19 16:24:40 by sujilee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,8 @@ void	delete_end(char **input)
 			tmp[i] = (*input)[i];
 		tmp[i] = '\0';
 	}
-	free(*input);
+	if (size != 0)
+		free(*input);
 	*input = tmp;
 }
 

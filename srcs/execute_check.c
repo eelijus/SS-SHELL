@@ -6,7 +6,7 @@
 /*   By: sean <sean@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/02 21:17:39 by sean              #+#    #+#             */
-/*   Updated: 2022/03/11 20:25:37 by sujilee          ###   ########.fr       */
+/*   Updated: 2022/03/18 21:53:32 by sean             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ int	builtin_cmd_check(t_data *data, char *cmd)
 	int	i;
 
 	i = -1;
+	if (!cmd)
+		return (0);
 	while (++i < CMD_NUM)
 		if (!ft_strncmp(cmd, data->cmd[i], ft_strlen(cmd)) && \
 		!ft_strncmp(cmd, data->cmd[i], ft_strlen(data->cmd[i])))
@@ -56,28 +58,58 @@ int	redirection_check2(t_cmd *cmd, char *input, int i)
 	int		ret;
 	char	*tmp2;
 
-	ret = make_token(&tmp, input);
-	cmd->cur_file = handle_quotes(tmp.cmd, cmd);
+	ret = make_token(&tmp, input, 1);
+	cmd->cur_file = handle_quotes(tmp.cmd, cmd, 0);
 	cmd->next_redir = tmp.redir;
-	return (ret);
+	if (ft_strlen(cmd->next_redir) == 0 || input[ret] != ' ')
+		return (ret - 1);
+	else
+		return (ret);
 }
 
-void	redirection_check(t_cmd *cmd)
+int	redirection_heredoc(char *cur_cmd, t_cmd *cmd)
+{
+	char	*temp;
+
+	cmd->heredoc_str = ft_strjoin(cmd->cmd, " ");
+	temp = ft_strjoin(cmd->heredoc_str, cmd->redir);
+	cmd->heredoc_str = ft_strjoin(temp, " ");
+	free(temp);
+	temp = ft_strjoin(cmd->heredoc_str, cmd->file);
+	cmd->heredoc_str = ft_strjoin(temp, "\n");
+	free(temp);
+	if (!ft_strncmp(cmd->redir, "<<", ft_strlen(cmd->redir)))
+	{
+		if (!cmd->cmd || !ft_strncmp(cmd->cmd, "cat", ft_strlen(cmd->cmd)))
+			do_here(cur_cmd, cmd);
+	}
+	return (1);
+}
+
+int	redirection_check(char *cur_cmd, t_cmd *cmd)
 {
 	int	fd;
 	int	i;
+	int	ret;
 
 	i = -1;
-	if (cmd->file)
+	ret = 0;
+	while ((cmd->file)[++i])
 	{
-		while ((cmd->file)[++i])
+		i += redirection_check2(cmd, &(cmd->file)[i], i);
+		if (ft_strlen(cmd->redir) != 0)
 		{
-			i += redirection_check2(cmd, &(cmd->file)[i], i);
 			if (!ft_strncmp(cmd->redir, "<", ft_strlen(cmd->redir)))
 				redirection_in(cmd);
+			else if (!ft_strncmp(cmd->redir, "<<", ft_strlen(cmd->redir)))
+				ret = redirection_heredoc(cur_cmd, cmd);
 			else
 				redirection_out(cmd);
-			cmd->redir = cmd->next_redir;
 		}
+		else
+			cmd->cmd_arg = ft_addonestring(cmd->cmd_arg, cmd->cur_file);
+		free(cmd->redir);
+		cmd->redir = cmd->next_redir;
 	}
+	return (ret);
 }

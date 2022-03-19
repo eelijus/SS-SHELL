@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_unset.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sean <sean@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: sujilee <sujilee@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/25 11:01:58 by sujilee           #+#    #+#             */
-/*   Updated: 2022/03/11 19:45:24 by sean             ###   ########.fr       */
+/*   Updated: 2022/03/14 17:48:32 by sujilee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,5 +89,4 @@ void	ft_unset(t_cmd *cmd, t_data *data)
 			*env = ft_removeonestring(*env, split[i], ft_sstrlen(*env));
 		i++;
 	}
-	dfree(split);
 }

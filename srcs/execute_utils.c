@@ -3,48 +3,91 @@
 /*                                                        :::      ::::::::   */
 /*   execute_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sujilee <sujilee@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/02 20:22:04 by sean              #+#    #+#             */
-/*   Updated: 2022/03/14 11:19:26 by marvin           ###   ########.fr       */
+/*   Updated: 2022/03/19 16:19:00 by sujilee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	make_path(t_exec *exec)
+t_glob	g_glob;
+
+int	make_path2(t_exec **exec)
 {
-	int			i;
 	char		*tmp;
+	int			i;
 	struct stat	status;
 
 	i = -1;
+	while (((*exec)->env_path)[++i])
+	{
+		tmp = ft_strjoin(((*exec)->env_path)[i], "/");
+		(*exec)->path = ft_strjoin(tmp, ((*exec)->split_cmd)[0]);
+		if (stat((*exec)->path, &status) == 0)
+			return (1);
+		free((*exec)->path);
+		free(tmp);
+	}
+	return (0);
+}
+
+int	make_path(t_exec *exec, t_cmd *cmd)
+{
+	struct stat	status;
+
+	if (g_glob.quote == 1 && !exec->split_cmd[0])
+		return (1);
+	if (!exec->split_cmd[0] || !ft_strncmp(exec->split_cmd[0], "	", 1))
+		return (0);
 	if (ft_strncmp(exec->split_cmd[0], "/bin", 4) == 0)
 	{
 		exec->path = ft_strdup(exec->split_cmd[0]);
 		if (stat(exec->path, &status) == 0)
 			return (0);
 	}
-	while ((exec->env_path)[++i])
+	if (make_path2(&exec))
+		return (0);
+	if (dlen(exec->env_path) == 0)
 	{
-		tmp = ft_strjoin((exec->env_path)[i], "/");
-		exec->path = ft_strjoin(tmp, (exec->split_cmd)[0]);
-		if (stat(exec->path, &status) == 0)
-			return (0);
-		free(exec->path);
-		free(tmp);
+		write(1, exec->split_cmd[0], ft_strlen(exec->split_cmd[0]));
+		print_error("%s: No such file or directory\n", 1, cmd);
+		printf("%s: No such file or directory\n", exec->split_cmd[0]);
+		if (ft_strncmp(exec->split_cmd[0], \
+		"cat", ft_strlen(exec->split_cmd[0])))
+			printf("\n");
+		return (0);
 	}
 	return (1);
 }
 
-int	make_token(t_cmd *cmd, char *input)
+void	make_token2(t_cmd **cmd, char *input, int i, int j)
+{	
+	//sujilee free
+	t_string	str;
+	
+	str.one = ft_substr(input, 0, (i - j));
+	(*cmd)->cmd = ft_strtrim(str.one, " ");
+	str.two = ft_substr(input, (i - j), j);
+	(*cmd)->redir = ft_strtrim(str.two, " ");
+	if (!(*cmd)->redir)
+		(*cmd)->redir = ft_strdup("");
+	str.three = ft_substr(input, i, ft_strlen(input) - i);
+	(*cmd)->file = ft_strtrim(str.three, " ");
+	if (!(*cmd)->file)
+		(*cmd)->file = ft_strdup("");
+	//sujilee free
+	free(str.one);
+	free(str.two);
+	free(str.three);
+}
+
+int	make_token(t_cmd *cmd, char *input, int flag)
 {
 	int		i;
 	int		j;
 	char	delimeter;
-	char	*t1;
-	char	*t2;
-	char	*t3;
 
 	i = -1;
 	j = 0;
@@ -61,28 +104,10 @@ int	make_token(t_cmd *cmd, char *input)
 		}
 		if (j != 0)
 			break ;
+		if (flag == 1 && i != 0 && input[i - 1] == ' ' && input[i] != ' ')
+			break ;
 	}
-	t1 = ft_substr(input, 0, (i - j));
-	if (ft_strncmp(t1, "", 1))
-	{
-		free(cmd->cmd);
-		cmd->cmd = ft_strtrim(t1, " ");
-		free(t1);
-	}
-	if (j != 0)
-	{
-		free(cmd->redir);
-		t2 = ft_substr(input, (i - j), j);
-		cmd->redir = ft_strtrim(t2, " ");
-		free(t2);
-	}
-	t3 = ft_substr(input, i, ft_strlen(input) - i);
-	if (ft_strncmp(t3, "", 1))
-	{
-		free(cmd->file);
-		cmd->file = ft_strtrim(t3, " ");
-		free(t3);
-	}
+	make_token2(&cmd, input, i, j);
 	return (i);
 }
 

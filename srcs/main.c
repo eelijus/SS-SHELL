@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sean <sean@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: sujilee <sujilee@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/01 16:17:25 by okwon             #+#    #+#             */
-/*   Updated: 2022/03/11 20:53:09 by sean             ###   ########.fr       */
+/*   Updated: 2022/03/19 16:47:09 by sujilee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,45 +24,41 @@ void	make_log(t_input *input, char *cmd_line)
 
 void	ft_here_echo(void)
 {
-	char	r[1024];
+	char	r[256];
 	int		fd;
-	int		read_size;
 
 	fd = open("test.txt", O_RDWR, 0644);
-	while ((read_size = read(fd, r, 1024)) > 0)
-	{
-		r[read_size] = '\0';
-		printf("%s", r);
-	}
+	while (read(fd, r, 256) > 0)
+		write(STDIN_FILENO, r, ft_strlen(r));
 	close(fd);
 }
 
-void	do_here(char *tmp)
+void	do_here(char *cur_cmd, t_cmd *cmd)
 {
-	char	*re;
-	char	**split;
+	char	*input;
 	char	r[128];
 	int		fd;
 	t_data	data;
 
-	split = ft_split(tmp, ' ');
 	fd = open("test.txt", O_CREAT | O_RDWR | O_TRUNC, 0644);
-	write(fd, "cat << ", 7);
-	write(fd, split[2], ft_strlen(split[2]));
 	while (1)
 	{
-		re = input_recive(&data);
-		write(fd, re, ft_strlen(re));
-		if (!ft_strncmp(re, split[2], ft_strlen(re)))
+		input = input_recive(&data);
+		if (ft_strncmp(input, "\n", 1) && \
+		 	!ft_strncmp(input, cmd->file, ft_strlen(input) - 1))
+			break ;
+		write(fd, input, ft_strlen(input));
+		if (g_glob.cflag == 1)
 		{
-			free(re);
+			write(1, "\n", 1);
 			break ;
 		}
-		free(re);
 	}
-	ft_here_echo();
-	dfree(split);
+	if (g_glob.cflag != 1 && cmd->cmd)
+		ft_here_echo();
 	close(fd);
+	//sujilee free
+	free(input);
 	fd = unlink("test.txt");
 }
 
@@ -72,21 +68,15 @@ void	shell_loop(t_data *data)
 	char	*cmd_line;
 	t_cmd	cmd;
 
-	data->input.cflag = 0;
+	g_glob.cflag = 0;
 	data->input.log = 0;
 	while (1)
 	{
-		if (data->input.cflag == 0)
-			prompt(1);
+		tcsetattr(STDIN_FILENO, TCSANOW, &data->term.term1);
+		determine_prompt();
 		cmd_line = input_recive(data);
-		if (!ft_strncmp(cmd_line, "cat <<", 6))
-		{
-			do_here(cmd_line);
-			free(cmd_line);
-			continue ;
-		}
 		make_log(&data->input, cmd_line);
-		cmd_split = ft_pipe_split(cmd_line, ';');
+		cmd_split = ft_split(cmd_line, ';');
 		cmd_handler(cmd_split, cmd_line, data);
 		if (cmd_line)
 			free(cmd_line);
@@ -96,12 +86,30 @@ void	shell_loop(t_data *data)
 	free(data->input.log);
 }
 
+void	determine_prompt(void)
+{
+	if (g_glob.cflag == 3)
+		prompt(3);
+	if (g_glob.cflag == 2)
+		prompt(2);
+	if (g_glob.cflag == 0)
+		prompt(0);
+	if (g_glob.cflag == 1)
+		prompt(1);
+}
+
+void	signal_handler2(int signo)
+{
+	if (g_glob.cflag == 2)
+		g_glob.cflag = 3;
+}
+
 int	main(int ac, char **av, char **env)
 {
 	t_data	data;
 
 	signal(SIGINT, signal_handler);
-	signal(SIGQUIT, SIG_IGN);
+	signal(SIGQUIT, signal_handler2);
 	g_glob.envp = ft_sstrdup(env);
 	term_init(&data.term.term1, &data.term.ori_term);
 	cmd_init(&data.cmd);
