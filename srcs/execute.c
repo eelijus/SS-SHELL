@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sujilee <sujilee@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sean <sean@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/02 17:09:12 by sean              #+#    #+#             */
-/*   Updated: 2022/03/19 16:41:42 by sujilee          ###   ########.fr       */
+/*   Updated: 2022/03/19 18:36:44 by sean             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,12 @@ t_glob	g_glob;
 
 void	print_error(char *message, int code, t_cmd *cmd)
 {
-	// ?—?Ÿ¬ë©”ì„¸ì§? ?ˆ˜? •?•˜ê¸?
+	// ì—ëŸ¬ë©”ì„¸ì§€ ìˆ˜ì •
 	write(cmd->std_out, message, ft_strlen(message));
 	if (!choose_process(cmd->pipe_count, cmd->cmd))
 	{
 		g_glob.exit_status = code;
-		// ?´ ê²½ìš°?— ? „ë¶??‹¤ ?”„ë¦¬ì‹œ?‚¤?Š”ê±? ì¶”ê???•˜ê¸?
+		// ì—¬ê¸°ì„œ í”„ë¦¬í•˜ê¸°
 	}
 	else
 		exit(code);
@@ -50,6 +50,18 @@ void	do_execute(t_cmd *cmd, t_exec *exec, t_data *data, int process)
 	free(split_cmd);
 }
 
+void	execute_cmd2(t_cmd *cmd, t_exec *exec, t_data *data, int process)
+{
+	do_execute(cmd, exec, data, process);
+	if (g_glob.exit_status == -1 || \
+	(g_glob.exit_status == 1 && g_glob.quote == 1))
+		g_glob.exit_status = 1;
+	else
+		g_glob.exit_status = 0;
+	dfree(exec->env_path);
+	free(exec->path);
+}
+
 void	execute_cmd(t_data *data, t_cmd *cmd, int process)
 {
 	t_exec	exec;
@@ -59,18 +71,7 @@ void	execute_cmd(t_data *data, t_cmd *cmd, int process)
 	flag = 0;
 	exec_init(&exec, cmd);
 	if (builtin_cmd_check(data, exec.split_cmd[0]))
-	{
-		do_execute(cmd, &exec, data, process);
-		if (g_glob.exit_status == -1 || \
-		(g_glob.exit_status == 1 && g_glob.quote == 1))
-			g_glob.exit_status = 1;
-		else
-			g_glob.exit_status = 0;
-		//sujilee free
-		dfree(exec.env_path);
-		// dfree(exec.split_cmd);
-		free(exec.path);	
-	}
+		execute_cmd2(cmd, &exec, data, process);
 	else
 	{
 		if (make_path(&exec, cmd))

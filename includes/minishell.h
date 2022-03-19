@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sujilee <sujilee@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sean <sean@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/19 16:15:49 by sean              #+#    #+#             */
-/*   Updated: 2022/03/19 15:20:45 by sujilee          ###   ########.fr       */
+/*   Updated: 2022/03/19 18:36:41 by sean             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,6 +143,7 @@ void	term_init(struct termios *term1, struct termios *ori_term);
 /******************************************************************************/
 
 int		**fds_set(int row);
+void	set_pipe_fds(int i, int stack, t_pipe *pip, int **fds);
 void	cmd_init(char ***cmd);
 
 /******************************************************************************/
@@ -160,10 +161,16 @@ char	**ft_addonestring(char **origin, char *addline);
 int		choose_process(int size, char *cmd);
 void	execute(t_data *data, t_pipe *pip, int row);
 char	**ft_pipe_split(char *cmd);
-void	set_pipe_fds(int i, int stack, t_pipe *pip, int **fds);
 void	p_func(char **cmd_split, char *cmd_line, int **fds, t_data *data);
 void	handle_process(char *cmd_split, int **fds, t_data *data);
 void	cmd_handler(char **cmd_split, char *cmd_line, t_data *data);
+
+/******************************************************************************/
+/**                             ft_pipe_split.c                              **/
+/******************************************************************************/
+
+char	**ft_pipe_split(char *cmd);
+void	ft_pipe_split2(char *cmd, int *i, int *start, char ***split_cmd);
 
 /******************************************************************************/
 /**                                utils.c	                                 **/
@@ -238,6 +245,7 @@ char	*handle_quotes(char *input, t_cmd *cmd, int process);
 /******************************************************************************/
 
 char	*ft_getenv(char *env);
+char	*ft_getenv2(char *env);
 char	*dollar(int i, char *input, t_cmd *cmd);
 
 /******************************************************************************/

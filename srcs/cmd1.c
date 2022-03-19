@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd1.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sujilee <sujilee@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sean <sean@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/07/01 16:21:58 by okwon             #+#    #+#             */
-/*   Updated: 2022/03/19 16:17:37 by sujilee          ###   ########.fr       */
+/*   Created: 2021/07/01 16:21:58 by sean              #+#    #+#             */
+/*   Updated: 2022/03/19 18:23:06 by sean             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,54 +59,6 @@ void	execute(t_data *data, t_pipe *pip, int row)
 			execute_input(data, pip, 0);
 		p_pipe(pip->old_fds, pip->fds);
 	}
-}
-
-char	**ft_pipe_split(char *cmd)
-{
-	int		start;
-	int		i;
-	char	**split_cmd;
-	char	*add_line;
-	t_string	str;
-
-	split_cmd = (char **)malloc(sizeof(char *) * 1);
-	split_cmd[0] = NULL;
-	start = 0;
-	i = -1;
-	while (cmd[++i])
-	{
-		if (cmd[i] == '\'' || cmd[i] == '"')
-			i = quote_detec_loop(cmd, cmd[i], i);
-		if (cmd[i] == '|')
-		{
-			//sujilee free
-			str.one = ft_substr(cmd, start, i - start);
-			split_cmd = ft_addonestring(split_cmd, str.one);
-			start = i + 1;
-			free(str.one);
-		}
-	}
-	if (start != i)
-	{
-		//sujilee free
-		str.two = ft_substr(cmd, start, i);
-		split_cmd = ft_addonestring(split_cmd, str.two);
-		free(str.two);
-	}
-	return (split_cmd);
-}
-
-void	set_pipe_fds(int i, int stack, t_pipe *pip, int **fds)
-{
-	if (i > 0)
-		pip->old_fds = fds[i - 1];
-	else
-		pip->old_fds = fds[0];
-	pip->fds = fds[i];
-	if (stack < ft_strlen(pip->ori_cmd_line))
-		pip->flag = pip->ori_cmd_line[stack];
-	else
-		pip->flag = 0;
 }
 
 void	p_func(char **cmd_split, char *cmd_line, int **fds, t_data *data)

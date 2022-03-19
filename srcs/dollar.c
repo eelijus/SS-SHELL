@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   dollar.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sujilee <sujilee@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sean <sean@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/07 17:15:31 by sean              #+#    #+#             */
-/*   Updated: 2022/03/19 16:33:57 by sujilee          ###   ########.fr       */
+/*   Updated: 2022/03/19 18:31:12 by sean             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,13 @@
 
 t_glob	g_glob;
 
-char	*ft_getenv(char *env)
+char	*ft_getenv2(char *env)
 {
 	int		i;
 	char	**split;
 	char	*ret;
 
 	i = -1;
-	if (!ft_strncmp(env, "$", ft_strlen(env)))
-		return (ft_strdup("$"));
-	if (!ft_strncmp(env, "?", ft_strlen(env)))
-		return (ft_strdup(ft_itoa(g_glob.exit_status)));
 	while ((g_glob.envp)[++i])
 	{
 		split = ft_split((g_glob.envp)[i], '=');
@@ -33,7 +29,6 @@ char	*ft_getenv(char *env)
 		{
 			if (ft_strchr(g_glob.envp[i], '='))
 			{
-				//sujilee free
 				ret = ft_strdup(split[1]);
 				dfree(split);
 				return (ret);
@@ -41,10 +36,22 @@ char	*ft_getenv(char *env)
 			else
 				break ;
 		}
-		//sujilee free
 		dfree(split);
 	}
 	return (ft_strdup(""));
+}
+
+char	*ft_getenv(char *env)
+{
+	char	**split;
+	char	*ret;
+
+	if (!ft_strncmp(env, "$", ft_strlen(env)))
+		return (ft_strdup("$"));
+	if (!ft_strncmp(env, "?", ft_strlen(env)))
+		return (ft_strdup(ft_itoa(g_glob.exit_status)));
+	ret = ft_getenv2(env);
+	return (ret);
 }
 
 char	*dollar(int i, char *input, t_cmd *cmd)

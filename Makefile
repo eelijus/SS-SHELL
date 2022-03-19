@@ -23,7 +23,8 @@ SRCS	=	srcs/main.c \
 			srcs/ft_export.c \
 			srcs/ft_unset.c \
 			srcs/utils_string.c \
-			srcs/execute_utils2.c
+			srcs/execute_utils2.c \
+			srcs/ft_pipe_split.c
 			
 INCS	=	-I includes -I libft
 OBJS	=	$(SRCS:.c=.o)

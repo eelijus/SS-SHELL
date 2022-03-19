@@ -6,7 +6,7 @@
 /*   By: sean <sean@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/02 14:02:49 by okwon             #+#    #+#             */
-/*   Updated: 2022/03/07 16:13:23 by sujilee          ###   ########.fr       */
+/*   Updated: 2022/03/19 18:23:05 by sean             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,19 @@ int	**fds_set(int row)
 	while (--row >= 0)
 		fds[row] = (int *)malloc(sizeof(int) * 2);
 	return (fds);
+}
+
+void	set_pipe_fds(int i, int stack, t_pipe *pip, int **fds)
+{
+	if (i > 0)
+		pip->old_fds = fds[i - 1];
+	else
+		pip->old_fds = fds[0];
+	pip->fds = fds[i];
+	if (stack < ft_strlen(pip->ori_cmd_line))
+		pip->flag = pip->ori_cmd_line[stack];
+	else
+		pip->flag = 0;
 }
 
 void	cmd_init(char ***cmd)
