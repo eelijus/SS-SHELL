@@ -6,7 +6,7 @@
 /*   By: sean <sean@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/02 20:22:04 by sean              #+#    #+#             */
-/*   Updated: 2022/03/19 20:07:24 by sean             ###   ########.fr       */
+/*   Updated: 2022/03/19 21:57:48 by sean             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,14 +27,14 @@ void	exec_init(t_exec *exec, t_cmd *cmd)
 	int	i;
 
 	exec->env_path = ft_split(ft_getenv("PATH"), ':');
-	if (cmd->cmd)
+	if (cmd->cmd && ft_strncmp(cmd->cmd, "", ft_strlen(cmd->cmd)))
 		exec->split_cmd = ft_split(cmd->cmd, ' ');
 	else
 	{
 		exec->split_cmd = (char **)malloc(sizeof(char *) * 1);
 		exec->split_cmd[0] = 0;
 	}
-	if (ft_strncmp(exec->split_cmd[0], "echo", ft_strlen(exec->split_cmd[0])) \
+	if (exec->split_cmd[0] && ft_strncmp(exec->split_cmd[0], "echo", ft_strlen(exec->split_cmd[0])) \
 	&& (!ft_strchr(cmd->cmd, '"') || !ft_strchr(cmd->cmd, '\'')))
 	{
 		dfree(exec->split_cmd);
