@@ -6,13 +6,19 @@
 /*   By: sean <sean@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/01 16:19:08 by okwon             #+#    #+#             */
-/*   Updated: 2022/03/15 21:09:38 by sean             ###   ########.fr       */
+/*   Updated: 2022/03/19 20:04:15 by sean             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
 t_glob	g_glob;
+
+void	signal_handler2(int signo)
+{
+	if (g_glob.cflag == 2)
+		g_glob.cflag = 3;
+}
 
 void	signal_handler(int signo)
 {

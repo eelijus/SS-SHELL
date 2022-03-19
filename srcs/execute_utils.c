@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sujilee <sujilee@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sean <sean@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/02 20:22:04 by sean              #+#    #+#             */
-/*   Updated: 2022/03/19 16:19:00 by sujilee          ###   ########.fr       */
+/*   Updated: 2022/03/19 19:23:47 by sean             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,9 +64,8 @@ int	make_path(t_exec *exec, t_cmd *cmd)
 
 void	make_token2(t_cmd **cmd, char *input, int i, int j)
 {	
-	//sujilee free
 	t_string	str;
-	
+
 	str.one = ft_substr(input, 0, (i - j));
 	(*cmd)->cmd = ft_strtrim(str.one, " ");
 	str.two = ft_substr(input, (i - j), j);
@@ -77,7 +76,6 @@ void	make_token2(t_cmd **cmd, char *input, int i, int j)
 	(*cmd)->file = ft_strtrim(str.three, " ");
 	if (!(*cmd)->file)
 		(*cmd)->file = ft_strdup("");
-	//sujilee free
 	free(str.one);
 	free(str.two);
 	free(str.three);

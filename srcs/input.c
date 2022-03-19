@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   input.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sujilee <sujilee@student.42.fr>            +#+  +:+       +#+        */
+/*   By: sean <sean@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/01 20:12:48 by okwon             #+#    #+#             */
-/*   Updated: 2022/03/19 16:11:55 by sujilee          ###   ########.fr       */
+/*   Updated: 2022/03/19 20:06:07 by sean             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,9 @@ void	case_not_newline(t_input *input, char *tmp)
 	else
 		tmp = ft_strjoin(input->input, &input->buf);
 	free(input->input);
-	// free(input->his_input);
+	if (input->his_input && \
+	!ft_strncmp(input->his_input, "", ft_strlen(input->his_input)))
+		free(input->his_input);
 	input->input = tmp;
 	input->his_input = input->input;
 }

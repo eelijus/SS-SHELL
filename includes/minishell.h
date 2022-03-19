@@ -6,7 +6,7 @@
 /*   By: sean <sean@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/19 16:15:49 by sean              #+#    #+#             */
-/*   Updated: 2022/03/19 18:36:41 by sean             ###   ########.fr       */
+/*   Updated: 2022/03/19 20:01:55 by sean             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,6 +125,7 @@ typedef struct s_data
 /******************************************************************************/
 
 void	signal_handler(int signo);
+void	signal_handler2(int signo);
 int		ctrl_c_func(t_input *input);
 void	ctrl_d_func(char *input, struct termios *ori_term);
 
@@ -142,6 +143,7 @@ void	term_init(struct termios *term1, struct termios *ori_term);
 /**                               cmd_utils.c                                **/
 /******************************************************************************/
 
+int		builtin_cmd_check(t_data *data, char *cmd);
 int		**fds_set(int row);
 void	set_pipe_fds(int i, int stack, t_pipe *pip, int **fds);
 void	cmd_init(char ***cmd);
@@ -153,6 +155,13 @@ void	cmd_init(char ***cmd);
 int		ft_sstrlen(char **strstr);
 char	**ft_sstrdup(char **origin);
 char	**ft_addonestring(char **origin, char *addline);
+
+/******************************************************************************/
+/**                              heredoc.c                                   **/
+/******************************************************************************/
+
+void	ft_here_echo(void);
+void	do_here(char *cur_cmd, t_cmd *cmd);
 
 /******************************************************************************/
 /**                                 cmd1.c                                   **/
@@ -221,7 +230,6 @@ char	**get_argv(char **split, char *file);
 /**                           exceute_check.c                                **/
 /******************************************************************************/
 
-int		builtin_cmd_check(t_data *data, char *cmd);
 void	redirection_in(t_cmd *cmd);
 void	redirection_out(t_cmd *cmd);
 int		redirection_check2(t_cmd *cmd, char *input, int i);
@@ -232,13 +240,21 @@ int		redirection_check(char *cur_cmd, t_cmd *cmd);
 /**                              quote.c                                     **/
 /******************************************************************************/
 
-int		not_quotes(char **new_input, char *input, int i, t_cmd *cmd);
 int		single_quotes(char **new_input, char *input, int i, t_cmd *cmd);
 char	*handle_quotes3(char **new_input);
 char	*double_quotes2(char *tmp, t_cmd *cmd);
 int		double_quotes(char **new_input, char *input, int i, t_cmd *cmd);
 char	*handle_quotes2(char *input, t_cmd *cmd);
 char	*handle_quotes(char *input, t_cmd *cmd, int process);
+
+/******************************************************************************/
+/**                              quote2.c                                    **/
+/******************************************************************************/
+
+int		not_quotes(char **new_input, char *input, int i, t_cmd *cmd);
+char	*not_quotes2(int i, char *input, char **new_input, t_cmd *cmd);
+char	*double_quotes2(char *tmp, t_cmd *cmd);
+int		double_quotes(char **new_input, char *input, int i, t_cmd *cmd);
 
 /******************************************************************************/
 /**                             dollar.c                                     **/
@@ -316,11 +332,8 @@ int		quote_detec_loop(char *input, char delimeter, int i);
 /******************************************************************************/
 
 void	make_log(t_input *input, char *cmd_line);
-void	ft_here_echo(void);
-void	do_here(char *cur_cmd, t_cmd *cmd);
 void	shell_loop(t_data *data);
 void	determine_prompt(void);
-void	signal_handler2(int signo);
 int		main(int ac, char **av, char **env);
 
 #endif

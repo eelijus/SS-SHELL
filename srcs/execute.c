@@ -6,7 +6,7 @@
 /*   By: sean <sean@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/02 17:09:12 by sean              #+#    #+#             */
-/*   Updated: 2022/03/19 18:36:44 by sean             ###   ########.fr       */
+/*   Updated: 2022/03/19 20:08:22 by sean             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,10 @@ t_glob	g_glob;
 
 void	print_error(char *message, int code, t_cmd *cmd)
 {
-	// 에러메세지 수정
 	write(cmd->std_out, message, ft_strlen(message));
 	if (!choose_process(cmd->pipe_count, cmd->cmd))
 	{
 		g_glob.exit_status = code;
-		// 여기서 프리하기
 	}
 	else
 		exit(code);
@@ -104,7 +102,6 @@ void	execute_input(t_data *data, t_pipe *pipe, int process)
 		free(cmd.cmd);
 	cmd.cmd = tmp;
 	execute_cmd(data, &cmd, process);
-	//sujilee free
 	if (cmd.cmd)
 		free(cmd.cmd);
 	if (cmd.redir)

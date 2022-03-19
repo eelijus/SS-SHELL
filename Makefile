@@ -14,6 +14,7 @@ SRCS	=	srcs/main.c \
 			srcs/execute_utils.c \
 			srcs/execute_check.c \
 			srcs/quote.c \
+			srcs/quote2.c \
 			srcs/dollar.c \
 			srcs/ft_pwd.c \
 			srcs/ft_echo.c \
@@ -24,7 +25,8 @@ SRCS	=	srcs/main.c \
 			srcs/ft_unset.c \
 			srcs/utils_string.c \
 			srcs/execute_utils2.c \
-			srcs/ft_pipe_split.c
+			srcs/ft_pipe_split.c \
+			srcs/heredoc.c
 			
 INCS	=	-I includes -I libft
 OBJS	=	$(SRCS:.c=.o)

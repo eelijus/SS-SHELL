@@ -6,11 +6,25 @@
 /*   By: sean <sean@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/02 14:02:49 by okwon             #+#    #+#             */
-/*   Updated: 2022/03/19 18:23:05 by sean             ###   ########.fr       */
+/*   Updated: 2022/03/19 18:53:15 by sean             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+int	builtin_cmd_check(t_data *data, char *cmd)
+{
+	int	i;
+
+	i = -1;
+	if (!cmd)
+		return (0);
+	while (++i < CMD_NUM)
+		if (!ft_strncmp(cmd, data->cmd[i], ft_strlen(cmd)) && \
+		!ft_strncmp(cmd, data->cmd[i], ft_strlen(data->cmd[i])))
+			return (1);
+	return (0);
+}
 
 int	**fds_set(int row)
 {
