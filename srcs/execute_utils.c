@@ -6,7 +6,7 @@
 /*   By: sean <sean@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/02 20:22:04 by sean              #+#    #+#             */
-/*   Updated: 2022/03/19 19:23:47 by sean             ###   ########.fr       */
+/*   Updated: 2022/03/19 21:41:02 by sean             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,8 @@ void	make_token2(t_cmd **cmd, char *input, int i, int j)
 
 	str.one = ft_substr(input, 0, (i - j));
 	(*cmd)->cmd = ft_strtrim(str.one, " ");
+	if (!(*cmd)->cmd)
+		(*cmd)->cmd = ft_strdup("");
 	str.two = ft_substr(input, (i - j), j);
 	(*cmd)->redir = ft_strtrim(str.two, " ");
 	if (!(*cmd)->redir)
