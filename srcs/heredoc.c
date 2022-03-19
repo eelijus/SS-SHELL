@@ -6,7 +6,7 @@
 /*   By: sean <sean@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/01 16:17:25 by sean              #+#    #+#             */
-/*   Updated: 2022/03/19 20:06:14 by sean             ###   ########.fr       */
+/*   Updated: 2022/03/19 21:31:11 by sean             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,8 @@ void	do_here(char *cur_cmd, t_cmd *cmd)
 	{
 		input = input_recive(&data);
 		if (ft_strncmp(input, "\n", 1) && \
-		 	!ft_strncmp(input, cmd->file, ft_strlen(input) - 1))
+		 	!ft_strncmp(input, cmd->file, ft_strlen(input) - 1) && \
+			 !ft_strncmp(input, cmd->file, ft_strlen(cmd->file)))
 			break ;
 		write(fd, input, ft_strlen(input));
 		if (g_glob.cflag == 1)
