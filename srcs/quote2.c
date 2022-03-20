@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   quote2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sean <sean@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: sujilee <sujilee@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/07 14:21:45 by sean              #+#    #+#             */
-/*   Updated: 2022/03/19 19:58:53 by sean             ###   ########.fr       */
+/*   Updated: 2022/03/20 18:04:41 by sujilee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,5 +117,6 @@ char	*double_quotes2(char *tmp, t_cmd *cmd)
 			free(str.two);
 		}
 	}
+	free(str.one);
 	return (tmp);
 }
