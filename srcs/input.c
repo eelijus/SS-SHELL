@@ -6,7 +6,7 @@
 /*   By: sean <sean@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/01 20:12:48 by okwon             #+#    #+#             */
-/*   Updated: 2022/03/19 20:06:07 by sean             ###   ########.fr       */
+/*   Updated: 2022/03/19 23:01:53 by sean             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ int	key_else(t_data *data, t_input *input)
 		delete_end(&input->input);
 	else if (input->buf == K_UP || input->buf == DOWN)
 	{
-		if (!input->input)
+		if (input->input)
 			free(input->input);
 		input->input = print_history(&data->term, input);
 	}

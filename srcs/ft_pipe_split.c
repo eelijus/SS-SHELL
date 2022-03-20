@@ -6,7 +6,7 @@
 /*   By: sean <sean@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/01 16:21:58 by sean              #+#    #+#             */
-/*   Updated: 2022/03/19 20:06:38 by sean             ###   ########.fr       */
+/*   Updated: 2022/03/19 22:42:18 by sean             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ char	**ft_pipe_split(char *cmd)
 	int			start;
 	int			i;
 	char		**split_cmd;
-	char		*add_line;
 	t_string	str;
 
 	split_cmd = (char **)malloc(sizeof(char *) * 1);

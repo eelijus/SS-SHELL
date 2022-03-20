@@ -6,7 +6,7 @@
 /*   By: sean <sean@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/02 21:17:39 by sean              #+#    #+#             */
-/*   Updated: 2022/03/19 18:52:23 by sean             ###   ########.fr       */
+/*   Updated: 2022/03/19 21:48:05 by sean             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ int	redirection_heredoc(char *cur_cmd, t_cmd *cmd)
 {
 	char	*temp;
 
+	printf("heredoc\n");
 	cmd->heredoc_str = ft_strjoin(cmd->cmd, " ");
 	temp = ft_strjoin(cmd->heredoc_str, cmd->redir);
 	cmd->heredoc_str = ft_strjoin(temp, " ");

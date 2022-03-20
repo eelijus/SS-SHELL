@@ -6,7 +6,7 @@
 /*   By: sean <sean@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/01 16:21:58 by sean              #+#    #+#             */
-/*   Updated: 2022/03/19 18:23:06 by sean             ###   ########.fr       */
+/*   Updated: 2022/03/19 22:56:20 by sean             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,30 +17,31 @@ t_glob	g_glob;
 int	choose_process(int size, char *cmd)
 {
 	char	**split;
+	int		ret;
 
+	ret = 1;
 	if (size == 1)
 	{
 		split = ft_split(cmd, ' ');
 		if (!split[0])
-			return (1);
+			ret = 1;
 		if (!ft_strncmp(split[0], "cd", ft_strlen(split[0])))
-			return (0);
+			ret = 0;
 		else if (!ft_strncmp(split[0], "exit", ft_strlen(split[0])))
-			return (0);
+			ret = 0;
 		else if (!ft_strncmp(split[0], "export", ft_strlen(split[0])))
-			return (0);
+			ret = 0;
 		else if (!ft_strncmp(split[0], "unset", ft_strlen(split[0])))
-			return (0);
+			ret = 0;
 		dfree(split);
 	}
-	return (1);
+	return (ret);
 }
 
 void	execute(t_data *data, t_pipe *pip, int row)
 {
 	pid_t	pid;
 	int		status;
-	char	**split;
 
 	pipe(pip->fds);
 	pid = fork();
@@ -113,10 +114,7 @@ void	handle_process(char *cmd_split, int **fds, t_data *data)
 void	cmd_handler(char **cmd_split, char *cmd_line, t_data *data)
 {
 	int		**fds;
-	pid_t	pid;
-	int		status;
 	int		i;
-	char	**cmd_pipe;
 
 	i = -1;
 	while (++i < dlen(cmd_split))
